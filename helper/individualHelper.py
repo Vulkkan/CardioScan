@@ -1,5 +1,4 @@
 # helper/individualHelper.py
-import streamlit as st
 import helper.preprocessor as preprocessor
 
 def get_insights(df):
@@ -41,10 +40,6 @@ def submitAndPredict(patient, df):
 
         prediction = preprocessor.model.predict(df)
         probabilities = preprocessor.model.predict_proba(df)
-
-        if probabilities.shape[0] == 0:
-            st.error("Prediction failed. No probability values returned.")
-            return None
 
         prediction_text = f"{patient} is predicted to be at low risk" if prediction[0] == 1 else f"{patient} is predicted to be at high risk"
 

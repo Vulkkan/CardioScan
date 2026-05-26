@@ -1,15 +1,8 @@
 # helper/batchHelper.py
-import streamlit as st
 from helper import preprocessor, individualHelper
-
-batch_data = st.session_state['data'] if 'data' in st.session_state else None
 
 def submitAndPredictBatch(data):
     if data is not None:
-        if data.empty:
-            st.error("Uploaded dataset is empty!")
-            return False
-        
         model = preprocessor.model
         df = data
 

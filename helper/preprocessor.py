@@ -29,7 +29,6 @@ def encode(input_df):
 
     return input_df
 
-
 def encodeBatch(df):
     applicants = df['Name'].tolist()
     df = df.drop(columns=['Name'])
