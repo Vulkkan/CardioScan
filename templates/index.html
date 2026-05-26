@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Heart Disease Prediction System{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-8 text-center">
+        <h1 class="display-4 mb-4">
+            <!-- <i class="fas fa-heartbeat text-danger me-2"></i> -->
+            CardioScan
+        </h1>
+        <p class="lead mb-5">
+            Quickly find high-risk heart problems with our AI-powered system. 
+            Run diagnoses, and analyze batches effortlessly.
+        </p>
+
+        <div class="row mt-5 justify-content-center">
+            <div class="col-md-5 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <i class="fas fa-user-plus fa-3x text-primary mb-3"></i>
+                        <h5 class="card-title">Create Patient Data</h5>
+                        <p class="card-text">Add new patient records.</p>
+                        <a href="/data-creation" class="btn btn-primary">Get Started</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-5 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <i class="fas fa-stethoscope fa-3x text-success mb-3"></i>
+                        <h5 class="card-title">Run Diagnosis</h5>
+                        <p class="card-text">Get risk predictions instantly</p>
+                        <a href="/configuration" class="btn btn-success">Start Diagnosis</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}Create Patient Data - Heart Disease Predictor{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <h1 class="mb-4">
+            <i class="fas fa-user-plus me-2"></i>Create Patient Data
+        </h1>
+        
+        <form method="POST">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>Patient Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Patient Name</label>
+                            <input type="text" class="form-control" name="name" value="John Connor" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Age (29-71)</label>
+                            <input type="number" class="form-control" name="age" min="29" max="71" value="45" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Gender</label>
+                            <select class="form-select" name="sex" required>
+                                <option value="Female">Female</option>
+                                <option value="Male">Male</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- Same input fields as prediction page -->
+                    <!-- Include all the same form fields from prediction.html -->
+                    
+                    <button type="submit" class="btn btn-success btn-lg">
+                        <i class="fas fa-save me-2"></i>Save Patient Data
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

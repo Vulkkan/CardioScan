@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+
+{% block title %}Batch Prediction - Heart Disease Predictor{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">
+    <i class="fas fa-database me-2"></i>Batch Prediction
+</h1>
+
+<div class="row">
+    <div class="col-md-5">
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="fas fa-upload me-2"></i>Upload Data</h5>
+            </div>
+            <div class="card-body">
+                <form method="POST" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label class="form-label">Upload CSV File</label>
+                        <input type="file" class="form-control" name="file" accept=".csv" required>
+                        <small class="text-muted">CSV file with patient data columns</small>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-play me-2"></i>Process Data
+                    </button>
+                </form>
+            </div>
+        </div>
+        
+        {% if batch_data is not none %}
+        <div class="card shadow-sm">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0"><i class="fas fa-table me-2"></i>Patient Data</h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive" style="max-height: 300px; overflow-y: auto;">
+                    {{ batch_data.to_html(classes='table table-striped table-hover mb-0', index=False) | safe }}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    
+    <div class="col-md-7">
+        {% if results %}
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="card border-success">
+                    <div class="card-header bg-success text-white">
+                        <h6 class="mb-0">
+                            <i class="fas fa-check-circle me-2"></i>Healthy Patients
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        {% set healthy = results | selectattr('Y_Probability', 'lt', 40) | list %}
+                        {% if healthy %}
+                            {% for patient in healthy %}
+                            <div class="alert alert-success py-2 mb-2">
+                                <strong>{{ patient.Patient }}</strong>: 
+                                {{ "%.2f"|format(patient.Y_Probability) }}% risk
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <p class="text-muted">No patients in this category</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card border-danger">
+                    <div class="card-header bg-danger text-white">
+                        <h6 class="mb-0">
+                            <i class="fas fa-exclamation-triangle me-2"></i>Attention Required
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        {% set critical = results | selectattr('Y_Probability', 'gt', 60) | list %}
+                        {% if critical %}
+                            {% for patient in critical %}
+                            <div class="alert alert-danger py-2 mb-2">
+                                <strong>{{ patient.Patient }}</strong>: 
+                                {{ "%.2f"|format(patient.Y_Probability) }}% risk
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <p class="text-muted">No patients in this category</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <h5><i class="fas fa-clipboard-check me-2"></i>Detailed Results</h5>
+        {% for result in results %}
+        <div class="card shadow-sm mb-3">
+            <div class="card-header">
+                <h6 class="mb-0">
+                    <i class="fas fa-user me-2"></i>Patient: {{ result.Patient }}
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-8">
+                        <h5 class="text-{{ 'success' if 'low risk' in result.Prediction else 'danger' }}">
+                            {{ result.Prediction }}
+                        </h5>
+                    </div>
+                    <div class="col-md-2 text-center">
+                        <small>Risk</small>
+                        <h4 class="text-danger">{{ "%.2f"|format(result.Y_Probability) }}%</h4>
+                    </div>
+                    <div class="col-md-2 text-center">
+                        <small>Health</small>
+                        <h4 class="text-success">{{ "%.2f"|format(result.X_Probability) }}%</h4>
+                    </div>
+                </div>
+                
+                <button class="btn btn-outline-info btn-sm mt-2" type="button" 
+                        data-bs-toggle="collapse" data-bs-target="#insights{{ loop.index }}">
+                    <i class="fas fa-lightbulb me-1"></i>Show Insights
+                </button>
+                
+                <div class="collapse mt-3" id="insights{{ loop.index }}">
+                    <ul class="list-group">
+                        {% for insight in result.Insights %}
+                        <li class="list-group-item">
+                            <i class="fas fa-info-circle text-info me-2"></i>
+                            {{ insight }}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class="text-center text-muted py-5">
+            <i class="fas fa-upload fa-3x mb-3"></i>
+            <h5>Upload a CSV file to see batch predictions</h5>
+            <p>Results will appear here after processing</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

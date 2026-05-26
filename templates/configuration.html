@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}Configuration - Heart Disease Predictor{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <h1 class="mb-4">
+            <i class="fas fa-cog me-2"></i>Configuration
+        </h1>
+        
+        <form method="POST" action="{{ url_for('configuration') }}">
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0"><i class="fas fa-robot me-2"></i>Model Selection</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="radio" name="model_type" 
+                                       id="randomForest" value="Random Forest" 
+                                       {{ 'checked' if model_type == 'Random Forest' else '' }}>
+                                <label class="form-check-label" for="randomForest">
+                                    <strong>Random Forest</strong>
+                                    <br><small class="text-muted">Ensemble learning method for higher accuracy</small>
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="model_type" 
+                                       id="logisticRegression" value="Logistic Regressor"
+                                       {{ 'checked' if model_type == 'Logistic Regressor' else '' }}>
+                                <label class="form-check-label" for="logisticRegression">
+                                    <strong>Logistic Regressor</strong>
+                                    <br><small class="text-muted">Statistical model for binary classification</small>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 mb-4">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-success text-white">
+                            <h5 class="mb-0"><i class="fas fa-users me-2"></i>Prediction Type</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="radio" name="prediction_type" 
+                                       id="singlePatient" value="Single Patient"
+                                       {{ 'checked' if prediction_type == 'Single Patient' else '' }}>
+                                <label class="form-check-label" for="singlePatient">
+                                    <strong>Single Patient</strong>
+                                    <br><small class="text-muted">Analyze one patient at a time</small>
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="prediction_type" 
+                                       id="multiplePatients" value="Multiple Patients"
+                                       {{ 'checked' if prediction_type == 'Multiple Patients' else '' }}>
+                                <label class="form-check-label" for="multiplePatients">
+                                    <strong>Multiple Patients</strong>
+                                    <br><small class="text-muted">Batch process using CSV upload</small>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-4">
+                <button type="submit" class="btn btn-primary btn-lg px-5">
+                    <i class="fas fa-arrow-right me-2"></i>Next
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

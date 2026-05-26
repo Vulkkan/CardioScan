@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+
+{% block title %}Patient Prediction - Heart Disease Predictor{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <h1 class="mb-4">
+            <i class="fas fa-user-md me-2"></i>Patient Information
+        </h1>
+        
+        <form method="POST" id="predictionForm">
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">Patient Name</label>
+                    <input type="text" class="form-control" name="name" value="John Connor" required>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">Age (29-71)</label>
+                    <input type="number" class="form-control" name="age" min="29" max="71" value="45" required>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">Gender</label>
+                    <select class="form-select" name="sex" required>
+                        <option value="Female">Female</option>
+                        <option value="Male">Male</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">Chest Pain Type (0-3)</label>
+                    <select class="form-select" name="cp" required>
+                        <option value="0">Type 0</option>
+                        <option value="1">Type 1</option>
+                        <option value="2">Type 2</option>
+                        <option value="3">Type 3</option>
+                    </select>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">Resting BP (94-200)</label>
+                    <input type="number" class="form-control" name="trestbps" min="94" max="200" value="120" required>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">Cholesterol (126-564)</label>
+                    <input type="number" class="form-control" name="chol" min="126" max="564" value="200" required>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">Fasting Blood Sugar</label>
+                    <select class="form-select" name="fbs" required>
+                        <option value="0">Normal (0)</option>
+                        <option value="1">High (1)</option>
+                    </select>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">Resting ECG (0-2)</label>
+                    <select class="form-select" name="restecg" required>
+                        <option value="0">Type 0</option>
+                        <option value="1">Type 1</option>
+                        <option value="2">Type 2</option>
+                    </select>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">Max Heart Rate (71-202)</label>
+                    <input type="number" class="form-control" name="thalach" min="71" max="202" value="150" required>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">Exercise Angina</label>
+                    <select class="form-select" name="exang" required>
+                        <option value="0">No (0)</option>
+                        <option value="1">Yes (1)</option>
+                    </select>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">Oldpeak (0-6.2)</label>
+                    <input type="number" class="form-control" name="oldpeak" min="0" max="6.2" step="0.1" value="1.0" required>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">Slope (0-2)</label>
+                    <select class="form-select" name="slope" required>
+                        <option value="0">Type 0</option>
+                        <option value="1">Type 1</option>
+                        <option value="2">Type 2</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">Major Vessels (0-4)</label>
+                    <select class="form-select" name="ca" required>
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                    </select>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">Thal (0-3)</label>
+                    <select class="form-select" name="thal" required>
+                        <option value="0">Type 0</option>
+                        <option value="1">Type 1</option>
+                        <option value="2">Type 2</option>
+                        <option value="3">Type 3</option>
+                    </select>
+                </div>
+            </div>
+            
+            <button type="submit" class="btn btn-primary btn-lg">
+                <i class="fas fa-stethoscope me-2"></i>Submit for Diagnosis
+            </button>
+        </form>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card shadow-sm">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-chart-pie me-2"></i>Diagnosis 
+                    <small class="text-white-50">({{ model_type }})</small>
+                </h5>
+            </div>
+            <div class="card-body" id="resultsContainer">
+                {% if result %}
+                    <h5 class="text-{{ 'success' if 'low risk' in result[1] else 'danger' }}">
+                        {{ result[1] }}
+                    </h5>
+                    
+                    <div class="row mt-4">
+                        <div class="col-6">
+                            <div class="card bg-light">
+                                <div class="card-body text-center">
+                                    <h6>Estimated Risk</h6>
+                                    <h3 class="text-danger">{{ result[2] }}</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="card bg-light">
+                                <div class="card-body text-center">
+                                    <h6>Estimated Health</h6>
+                                    <h3 class="text-success">{{ result[3] }}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <h6><i class="fas fa-lightbulb text-warning me-2"></i>Insights</h6>
+                        <ul class="list-group">
+                            {% for insight in result[4] %}
+                                <li class="list-group-item">
+                                    <i class="fas fa-check-circle text-success me-2"></i>
+                                    {{ insight }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% else %}
+                    <div class="text-center text-muted py-5">
+                        <i class="fas fa-clipboard-list fa-3x mb-3"></i>
+                        <p>Submit patient data to see diagnosis results</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
